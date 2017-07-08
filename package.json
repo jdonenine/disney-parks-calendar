@@ -1,0 +1,41 @@
+{
+  "name": "disney-parks-calendar",
+  "version": "1.0.0",
+  "description": "A package for extracting and summarizing Disney theme park operating hours",
+  "main": "dist/index",
+  "types": "dist/index",
+  "scripts": {
+    "clean": "del dist",
+    "build": "npm run clean && tsc",
+    "start": "node dist/index.js",
+    "test": "node dist/test/test.js"
+  },
+  "keywords": [
+    "disney",
+    "parks",
+    "calendar",
+    "hours",
+    "disney world",
+    "world"
+  ],
+  "author": "Jeffry DiNoto",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/cheerio": "^0.22.1",
+    "@types/core-js": "0.9.35",
+    "@types/dateformat": "1.0.1",
+    "@types/moment-timezone": "^0.2.34",
+    "@types/node": "7.0.7",
+    "@types/request": "0.0.43",
+    "del-cli": "^1.0.0",
+    "typescript": "2.3.4"
+  },
+  "dependencies": {
+    "cheerio": "1.0.0-rc.1",
+    "core-js": "2.4.1",
+    "dateformat": "2.0.0",
+    "moment-timezone": "^0.5.13",
+    "request": "2.81.0",
+    "rxjs": "5.4.0"
+  }
+}
