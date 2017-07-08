@@ -29,6 +29,20 @@ DisneyParksCalendar.getParkHours(...dates).
     );
 ```
 
+```javascript
+var disneyParksCalendar = require("disney-parks-calendar")
+var date07072017 = new Date("2017-07-07 00:00:01");
+var date07082017 = new Date("2017-07-08 00:00:01");
+var date07092017 = new Date("2017-07-09 00:00:01");
+var dates = [date07072017, date07082017, date07092017];
+disneyParksCalendar.DisneyParksCalendar.getParkHours(...dates).
+    toArray().
+    subscribe(
+        (data) => console.log(data),
+        (error) => console.error(error)
+    );
+```
+
 Response:
 
 ```
