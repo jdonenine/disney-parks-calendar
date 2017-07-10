@@ -14,6 +14,8 @@ var ParkEnum;
 })(ParkEnum = exports.ParkEnum || (exports.ParkEnum = {}));
 var ParkDefinition = (function () {
     function ParkDefinition() {
+        this.isThemePark = false;
+        this.isWaterPark = false;
     }
     return ParkDefinition;
 }());
@@ -22,37 +24,44 @@ var ParkDefintions = [
     {
         id: ParkEnum.MAGIC_KINGDOM,
         name: 'Magic Kingdom',
-        parkName: 'Magic Kingdom Park'
+        parkName: 'Magic Kingdom Park',
+        isThemePark: true
     },
     {
         id: ParkEnum.EPCOT_FUTURE_WORLD,
         name: 'Epcot - Future World',
-        parkName: 'Epcot - Future World'
+        parkName: 'Epcot - Future World',
+        isThemePark: true
     },
     {
         id: ParkEnum.EPCOT_WORLD_SHOWCASE,
         name: 'Epcot - World Showcase',
-        parkName: 'Epcot - World Showcase'
+        parkName: 'Epcot - World Showcase',
+        isThemePark: true
     },
     {
         id: ParkEnum.HOLLYWOOD_STUDIOS,
         name: 'Hollywood Studios',
-        parkName: 'Disney\'s Hollywood Studios'
+        parkName: 'Disney\'s Hollywood Studios',
+        isThemePark: true
     },
     {
         id: ParkEnum.ANIMAL_KINGDOM,
         name: 'Animal Kingdom',
-        parkName: 'Disney\'s Animal Kingdom Theme Park'
+        parkName: 'Disney\'s Animal Kingdom Theme Park',
+        isThemePark: true
     },
     {
         id: ParkEnum.TYPHOON_LAGOON,
         name: 'Typhoon Lagoon',
-        parkName: 'Disney\'s Typhoon Lagoon Water Park'
+        parkName: 'Disney\'s Typhoon Lagoon Water Park',
+        isWaterPark: true
     },
     {
         id: ParkEnum.BLIZZARD_BEACH,
         name: 'Blizzard Beach',
-        parkName: 'Disney\'s Blizzard Beach Water Park'
+        parkName: 'Disney\'s Blizzard Beach Water Park',
+        isWaterPark: true
     },
     {
         id: ParkEnum.ESPN_WWS,

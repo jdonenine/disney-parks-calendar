@@ -13,6 +13,8 @@ export declare class ParkDefinition {
     id: ParkEnum;
     name: string;
     parkName: string;
+    isThemePark?: boolean;
+    isWaterPark?: boolean;
 }
 export declare class ParkEnumHelper {
     static getAllParkDefinitions(): Array<ParkDefinition>;
