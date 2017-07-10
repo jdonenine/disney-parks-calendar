@@ -114,7 +114,7 @@ export class DisneyCalendarScrapperService {
             let parkOperatingHours: ParkOperatingHours = new ParkOperatingHours();
             parkOperatingHours.parkId = ParkEnum[parkDef.id];
             parkOperatingHours.parkName = parkDef.name;
-            parkOperatingHours.date = date;
+            parkOperatingHours.date = moment(date);
 
             let nameContainer: CheerioElement = element.parent;
             if (!nameContainer) {
@@ -236,8 +236,8 @@ export class DisneyCalendarScrapperService {
             return;
         }
         let times: TimeRange = new TimeRange();
-        times.openTime = open.unix()*1000;
-        times.closeTime = close.unix()*1000;
+        times.openTime = open;
+        times.closeTime = close;
         return times;
     }
 }

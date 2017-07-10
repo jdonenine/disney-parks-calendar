@@ -1,5 +1,6 @@
+import { Moment } from "moment/moment";
 export declare class TimeRange {
-    openTime: number;
-    closeTime: number;
+    openTime: Moment;
+    closeTime: Moment;
     toString(): string;
 }

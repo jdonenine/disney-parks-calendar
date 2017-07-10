@@ -110,7 +110,7 @@ var DisneyCalendarScrapperService = (function () {
             var parkOperatingHours = new park_operating_hours_1.ParkOperatingHours();
             parkOperatingHours.parkId = park_1.ParkEnum[parkDef.id];
             parkOperatingHours.parkName = parkDef.name;
-            parkOperatingHours.date = date;
+            parkOperatingHours.date = moment(date);
             var nameContainer = element.parent;
             if (!nameContainer) {
                 console.error('Unable to step to parent of parkName for park \'' + parkDef.name + '\'');
@@ -229,8 +229,8 @@ var DisneyCalendarScrapperService = (function () {
             return;
         }
         var times = new time_range_1.TimeRange();
-        times.openTime = open.unix() * 1000;
-        times.closeTime = close.unix() * 1000;
+        times.openTime = open;
+        times.closeTime = close;
         return times;
     };
     return DisneyCalendarScrapperService;
