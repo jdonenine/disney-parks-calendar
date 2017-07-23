@@ -145,11 +145,11 @@ var DisneyCalendarScrapperService = (function () {
             });
             var regularHours = DisneyCalendarScrapperService.processHoursContainer(standardHoursContainer, date);
             if (regularHours) {
-                parkOperatingHours.standardHours = regularHours;
+                parkOperatingHours.standardHours = parkOperatingHours.standardHours.concat(regularHours);
             }
             var magicHours = DisneyCalendarScrapperService.processHoursContainer(extendedHoursContainer, date);
             if (magicHours) {
-                parkOperatingHours.magicHours = magicHours;
+                parkOperatingHours.magicHours = parkOperatingHours.magicHours.concat(magicHours);
             }
             hoursList.push(parkOperatingHours);
         });
@@ -178,8 +178,7 @@ var DisneyCalendarScrapperService = (function () {
         if (!timeRangeStrings || timeRangeStrings.length < 1) {
             return;
         }
-        var open;
-        var close;
+        var timeRanges = [];
         for (var _i = 0, timeRangeStrings_1 = timeRangeStrings; _i < timeRangeStrings_1.length; _i++) {
             var timeRangeString = timeRangeStrings_1[_i];
             if (!timeRangeString) {
@@ -217,21 +216,12 @@ var DisneyCalendarScrapperService = (function () {
             if (endAmOrPm.toUpperCase() == 'AM' && startAmOrPm.toUpperCase() == 'PM') {
                 modEndDate.add(1, 'd');
             }
-            if (!open || modStartDate < open) {
-                open = modStartDate;
-            }
-            if (!close || modEndDate > close) {
-                close = modEndDate;
-            }
+            var timeRange = new time_range_1.TimeRange();
+            timeRange.openTime = modStartDate;
+            timeRange.closeTime = modEndDate;
+            timeRanges.push(timeRange);
         }
-        if (!open || !close) {
-            console.error('Unable to extract open and close time.');
-            return;
-        }
-        var times = new time_range_1.TimeRange();
-        times.openTime = open;
-        times.closeTime = close;
-        return times;
+        return timeRanges;
     };
     return DisneyCalendarScrapperService;
 }());

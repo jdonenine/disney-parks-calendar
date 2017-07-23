@@ -148,21 +148,20 @@ export class DisneyCalendarScrapperService {
                         extendedHoursContainer = parkInfoContainer;
                     }
                 })
-            let regularHours: TimeRange = DisneyCalendarScrapperService.processHoursContainer(standardHoursContainer, date);
+            let regularHours: Array<TimeRange> = DisneyCalendarScrapperService.processHoursContainer(standardHoursContainer, date);
             if (regularHours) {
-                parkOperatingHours.standardHours = regularHours;
+                parkOperatingHours.standardHours = parkOperatingHours.standardHours.concat(regularHours);
             }
-            let magicHours: TimeRange = DisneyCalendarScrapperService.processHoursContainer(extendedHoursContainer, date);
+            let magicHours: Array<TimeRange> = DisneyCalendarScrapperService.processHoursContainer(extendedHoursContainer, date);
             if (magicHours) {
-                parkOperatingHours.magicHours = magicHours;
+                parkOperatingHours.magicHours = parkOperatingHours.magicHours.concat(magicHours);
             }
             hoursList.push(parkOperatingHours);
         })
-
         return hoursList;
     }
 
-    private static processHoursContainer(container: CheerioElement, date: Date): TimeRange {
+    private static processHoursContainer(container: CheerioElement, date: Date): Array<TimeRange> {
         if (!container || !container.children) {
             return;
         }
@@ -182,12 +181,11 @@ export class DisneyCalendarScrapperService {
         return DisneyCalendarScrapperService.processTimeRanges(timeRangeStrings, date);
     }
 
-    private static processTimeRanges(timeRangeStrings: Array<string>, date: Date): TimeRange {
+    private static processTimeRanges(timeRangeStrings: Array<string>, date: Date): Array<TimeRange> {
         if (!timeRangeStrings || timeRangeStrings.length < 1) {
             return;
         }
-        let open: Moment;
-        let close: Moment;
+        let timeRanges: Array<TimeRange> = [];
         for (let timeRangeString of timeRangeStrings) {
             if (!timeRangeString) {
                 continue;
@@ -224,20 +222,11 @@ export class DisneyCalendarScrapperService {
             if (endAmOrPm.toUpperCase() == 'AM' && startAmOrPm.toUpperCase() == 'PM') {
                 modEndDate.add(1, 'd');
             }
-            if (!open || modStartDate < open) {
-                open = modStartDate;
-            }
-            if (!close || modEndDate > close) {
-                close = modEndDate;
-            }
+            let timeRange: TimeRange = new TimeRange();
+            timeRange.openTime = modStartDate;
+            timeRange.closeTime = modEndDate;
+            timeRanges.push(timeRange);
         }
-        if (!open || !close) {
-            console.error('Unable to extract open and close time.');
-            return;
-        }
-        let times: TimeRange = new TimeRange();
-        times.openTime = open;
-        times.closeTime = close;
-        return times;
+        return timeRanges;
     }
 }
