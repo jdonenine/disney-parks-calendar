@@ -7,12 +7,12 @@ var TimeRange = (function () {
         var open = 'INVALID';
         var close = 'INVALID';
         if (this.openTime != undefined && this.openTime != null) {
-            open = this.openTime.toDate().toLocaleString();
+            open = this.openTime.format('MM/DD/YYYY hh:mm a z');
         }
         if (this.closeTime != undefined && this.closeTime != null) {
-            close = this.closeTime.toDate().toLocaleString();
+            close = this.closeTime.format('MM/DD/YYYY hh:mm a z');
         }
-        return open + ' - ' + close;
+        return open + ' -> ' + close;
     };
     return TimeRange;
 }());

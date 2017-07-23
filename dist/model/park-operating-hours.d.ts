@@ -4,6 +4,7 @@ export declare class ParkOperatingHours {
     parkId: string;
     parkName: string;
     date: Moment;
-    standardHours: TimeRange;
-    magicHours: TimeRange;
+    standardHours: Array<TimeRange>;
+    magicHours: Array<TimeRange>;
+    toString(): string;
 }
