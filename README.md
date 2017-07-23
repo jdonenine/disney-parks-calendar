@@ -47,33 +47,16 @@ Response:
 
 ```
 [
-   ParkOperatingHours   {
-      parkId:'MAGIC_KINGDOM',
-      parkName:'Magic Kingdom',
-      date:2017-07-09T04:00:01.000Z,
-      standardHours:TimeRange      {
-         openTime:1499605200000,
-         closeTime:1499652000000
-      }
-   },
-   ParkOperatingHours   {
-      parkId:'EPCOT_FUTURE_WORLD',
-      parkName:'Epcot - Future World',
-      date:2017-07-09T04:00:01.000Z,
-      standardHours:TimeRange      {
-         openTime:1499605200000,
-         closeTime:1499648400000
-      }
-   },
-...
-   ParkOperatingHours   {
-      parkId:'DISNEY_SPRINGS',
-      parkName:'Disney Springs',
-      date:2017-07-08T04:00:01.000Z,
-      standardHours:TimeRange      {
-         openTime:1499522400000,
-         closeTime:1499486400000
-      }
-   }
+    ParkOperatingHours   {
+        parkId:'MAGIC_KINGDOM',
+        parkName:'Magic Kingdom',
+        date:2017-07-09T04:00:01.000Z,
+        standardHours:[
+            TimeRange {
+                openTime:1499605200000,
+                closeTime:1499652000000
+            }
+        ]
+    }
 ]
 ```
