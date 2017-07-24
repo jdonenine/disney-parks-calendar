@@ -65,15 +65,17 @@ var DisneyCalendarScrapperService = (function () {
         }
         var URL = DisneyCalendarScrapperService.buildURL(date);
         return Rx_1.Observable.create(function (observer) {
-            request(URL, function (error, response, body) {
+            request({ url: URL, followRedirect: false }, function (error, response, body) {
                 if (error) {
                     observer.error(error);
                 }
                 else {
-                    var hoursList = DisneyCalendarScrapperService.processHTML(body, date);
-                    for (var _i = 0, hoursList_1 = hoursList; _i < hoursList_1.length; _i++) {
-                        var hours = hoursList_1[_i];
-                        observer.next(hours);
+                    if (response.statusCode != 302) {
+                        var hoursList = DisneyCalendarScrapperService.processHTML(body, date);
+                        for (var _i = 0, hoursList_1 = hoursList; _i < hoursList_1.length; _i++) {
+                            var hours = hoursList_1[_i];
+                            observer.next(hours);
+                        }
                     }
                 }
                 observer.complete();

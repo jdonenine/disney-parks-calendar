@@ -69,13 +69,15 @@ export class DisneyCalendarScrapperService {
         }
         let URL: string = DisneyCalendarScrapperService.buildURL(date);
         return Observable.create((observer: Observer<ParkOperatingHours>) => {
-            request(URL, (error, response, body) => {
+            request({url: URL, followRedirect: false}, (error, response, body) => {
                 if (error) {
                     observer.error(error);
                 } else {
-                    let hoursList: Array<ParkOperatingHours> = DisneyCalendarScrapperService.processHTML(body, date);
-                    for (let hours of hoursList) {
-                        observer.next(hours);
+                    if (response.statusCode != 302) {
+                        let hoursList: Array<ParkOperatingHours> = DisneyCalendarScrapperService.processHTML(body, date);
+                        for (let hours of hoursList) {
+                            observer.next(hours);
+                        }
                     }
                 }
                 observer.complete();
