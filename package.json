@@ -1,6 +1,6 @@
 {
   "name": "disney-parks-calendar",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A package for extracting and summarizing Disney theme park operating hours",
   "repository": {
     "type": "git",
