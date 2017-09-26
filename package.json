@@ -28,7 +28,7 @@
     "@types/cheerio": "^0.22.1",
     "@types/core-js": "0.9.35",
     "@types/dateformat": "1.0.1",
-    "@types/moment-timezone": "^0.2.34",
+    "@types/moment-timezone": "^0.2.35",
     "@types/node": "7.0.7",
     "@types/request": "0.0.43",
     "del-cli": "^1.0.0",
@@ -38,6 +38,7 @@
     "cheerio": "1.0.0-rc.1",
     "core-js": "2.4.1",
     "dateformat": "2.0.0",
+    "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",
     "request": "2.81.0",
     "rxjs": "5.4.0"

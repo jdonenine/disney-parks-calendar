@@ -5,6 +5,19 @@ var ParkOperatingHours = (function () {
         this.standardHours = [];
         this.magicHours = [];
     }
+    Object.defineProperty(ParkOperatingHours.prototype, "date", {
+        get: function () {
+            return this._date;
+        },
+        set: function (date) {
+            this._date = date;
+            if (!this._date)
+                return;
+            this._date.tz("America/New_York");
+        },
+        enumerable: true,
+        configurable: true
+    });
     ParkOperatingHours.prototype.toString = function () {
         var ret = 'ParkOperatingHours: ';
         ret += this.parkName + '|';
