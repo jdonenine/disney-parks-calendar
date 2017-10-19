@@ -17,10 +17,10 @@ Both "standard" and "extra magic" hours are provided.
 
 ## Example Usage
 ```typescript
-let date07072017: Date = new Date("2017-07-07 00:00:01");
-let date07082017: Date = new Date("2017-07-08 00:00:01");
-let date07092017: Date = new Date("2017-07-09 00:00:01");
-let dates: Array<Date> = [date07072017, date07082017, date07092017];
+let date07072017: SimpleDate = SimpleDate.parse("2017-07-07");
+let date07082017: SimpleDate = SimpleDate.parse("2017-07-08");
+let date07092017: SimpleDate = SimpleDate.parse("2017-07-09");
+let dates: Array<SimpleDate> = [date07072017, date07082017, date07092017];
 DisneyParksCalendar.getParkHours(...dates).
     toArray().
     subscribe(
@@ -31,9 +31,9 @@ DisneyParksCalendar.getParkHours(...dates).
 
 ```javascript
 var disneyParksCalendar = require("disney-parks-calendar")
-var date07072017 = new Date("2017-07-07 00:00:01");
-var date07082017 = new Date("2017-07-08 00:00:01");
-var date07092017 = new Date("2017-07-09 00:00:01");
+var date07072017 = SimpleDate.parse("2017-07-07");
+var date07082017 = SimpleDate.parse("2017-07-08");
+var date07092017 = SimpleDate.parse("2017-07-09");
 var dates = [date07072017, date07082017, date07092017];
 disneyParksCalendar.DisneyParksCalendar.getParkHours(...dates).
     toArray().
@@ -50,7 +50,11 @@ Response:
    ParkOperatingHours   {
       parkId:'MAGIC_KINGDOM',
       parkName:'Magic Kingdom',
-      date:2017-07-09T04:00:01.000Z,
+      date:SimpleDate {
+          year:2017,
+          month:7,
+          date:9
+      },
       standardHours:TimeRange      {
          openTime:1499605200000,
          closeTime:1499652000000
@@ -59,7 +63,11 @@ Response:
    ParkOperatingHours   {
       parkId:'EPCOT_FUTURE_WORLD',
       parkName:'Epcot - Future World',
-      date:2017-07-09T04:00:01.000Z,
+      date:SimpleDate {
+          year:2017,
+          month:7,
+          date:9
+      },
       standardHours:TimeRange      {
          openTime:1499605200000,
          closeTime:1499648400000
@@ -69,7 +77,11 @@ Response:
    ParkOperatingHours   {
       parkId:'DISNEY_SPRINGS',
       parkName:'Disney Springs',
-      date:2017-07-08T04:00:01.000Z,
+      date:SimpleDate {
+          year:2017,
+          month:7,
+          date:9
+      },
       standardHours:TimeRange      {
          openTime:1499522400000,
          closeTime:1499486400000
