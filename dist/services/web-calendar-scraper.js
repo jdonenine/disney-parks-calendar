@@ -7,9 +7,6 @@ var WebCalendarScraper = (function () {
     WebCalendarScraper.prototype.isCalendarAvailable = function (date) {
         return disney_calendar_scrapper_service_1.DisneyCalendarScrapperService.isCalendarAvailable(date);
     };
-    WebCalendarScraper.prototype.findLastDateAvailableStartingFrom = function (date) {
-        return disney_calendar_scrapper_service_1.DisneyCalendarScrapperService.findLastDateAvailableStartingFrom(date);
-    };
     WebCalendarScraper.prototype.getOperatingHours = function (date) {
         return disney_calendar_scrapper_service_1.DisneyCalendarScrapperService.getOperatingHours(date);
     };

@@ -1,9 +1,9 @@
+import { SimpleDate } from './simple-date';
 import { TimeRange } from './time-range';
-import { Moment } from "moment/moment";
 export declare class ParkOperatingHours {
     parkId: string;
     parkName: string;
-    date: Moment;
+    date: SimpleDate;
     standardHours: Array<TimeRange>;
     magicHours: Array<TimeRange>;
     toString(): string;

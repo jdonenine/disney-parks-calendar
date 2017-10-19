@@ -9,7 +9,7 @@ var ParkOperatingHours = (function () {
         var ret = 'ParkOperatingHours: ';
         ret += this.parkName + '|';
         ret += this.parkId + '|';
-        ret += this.date.format('MM/DD/YYYY') + '|';
+        ret += this.date.toString() + '|';
         ret += 'standardHours:';
         for (var _i = 0, _a = this.standardHours; _i < _a.length; _i++) {
             var timeRange = _a[_i];

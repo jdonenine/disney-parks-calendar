@@ -1,10 +1,10 @@
+import { SimpleDate } from './simple-date';
 import { TimeRange } from './time-range';
-import { Moment } from "moment/moment";
 
 export class ParkOperatingHours {
     parkId: string;
     parkName: string;
-    date: Moment;
+    date: SimpleDate;
     standardHours: Array<TimeRange> = [];
     magicHours: Array<TimeRange> = [];
 
@@ -12,7 +12,7 @@ export class ParkOperatingHours {
         let ret: string = 'ParkOperatingHours: ';
         ret += this.parkName + '|';
         ret += this.parkId + '|';
-        ret += this.date.format('MM/DD/YYYY') + '|';
+        ret += this.date.toString() + '|';
         ret += 'standardHours:';
         for (let timeRange of this.standardHours) {
             ret += '[' + timeRange.toString() + ']';

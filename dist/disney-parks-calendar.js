@@ -6,6 +6,9 @@ var access = new web_calendar_scraper_1.WebCalendarScraper();
 var DisneyParksCalendar = (function () {
     function DisneyParksCalendar() {
     }
+    DisneyParksCalendar.isCalendarAvailable = function (date) {
+        return access.isCalendarAvailable(date);
+    };
     DisneyParksCalendar.getParkHours = function () {
         var dates = [];
         for (var _i = 0; _i < arguments.length; _i++) {
