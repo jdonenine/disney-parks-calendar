@@ -4,7 +4,6 @@ require("rxjs/add/operator/combineAll");
 require("rxjs/add/operator/filter");
 require("rxjs/add/operator/mergeMap");
 var cheerio = require("cheerio");
-var dateFormat = require("dateformat");
 var moment = require("moment-timezone");
 var request = require("request");
 var Rx_1 = require("rxjs/Rx");
@@ -19,26 +18,13 @@ var DisneyCalendarScrapperService = (function () {
     function DisneyCalendarScrapperService() {
     }
     DisneyCalendarScrapperService.buildURL = function (date) {
-        if (!date) {
+        if (!date || !date.isValid()) {
             throw new Error('Invalid date requested');
         }
-        return DisneyCalendarScrapperService.DISNEY_CALENDAR_URL_BASE + dateFormat(date, DisneyCalendarScrapperService.DISNEY_CALENDAR_URL_DATE_FORMAT) + '/';
-    };
-    DisneyCalendarScrapperService.findLastDateAvailableStartingFrom = function (date) {
-        if (date === void 0) { date = new Date(); }
-        return DisneyCalendarScrapperService.isCalendarAvailable(date).
-            mergeMap(function (availability) {
-            if (availability.available) {
-                return DisneyCalendarScrapperService.findLastDateAvailableStartingFrom(new Date(availability.date.getTime() + HOURS_24_MS));
-            }
-            else {
-                var lastDate = new Date(availability.date.getTime() - HOURS_24_MS);
-                return Rx_1.Observable.of(new calendar_availability_1.CalendarAvailability(lastDate, true));
-            }
-        });
+        return DisneyCalendarScrapperService.DISNEY_CALENDAR_URL_BASE + date.toString() + '/';
     };
     DisneyCalendarScrapperService.isCalendarAvailable = function (date) {
-        if (!date) {
+        if (!date || !date.isValid()) {
             return Rx_1.Observable.throw('Invalid date requested');
         }
         var URL = DisneyCalendarScrapperService.buildURL(date);
@@ -65,15 +51,20 @@ var DisneyCalendarScrapperService = (function () {
         }
         var URL = DisneyCalendarScrapperService.buildURL(date);
         return Rx_1.Observable.create(function (observer) {
-            request(URL, function (error, response, body) {
+            request({ url: URL, followRedirect: false }, function (error, response, body) {
                 if (error) {
                     observer.error(error);
                 }
                 else {
-                    var hoursList = DisneyCalendarScrapperService.processHTML(body, date);
-                    for (var _i = 0, hoursList_1 = hoursList; _i < hoursList_1.length; _i++) {
-                        var hours = hoursList_1[_i];
-                        observer.next(hours);
+                    if (response.statusCode == 302) {
+                        observer.next(null);
+                    }
+                    else {
+                        var hoursList = DisneyCalendarScrapperService.processHTML(body, date);
+                        for (var _i = 0, hoursList_1 = hoursList; _i < hoursList_1.length; _i++) {
+                            var hours = hoursList_1[_i];
+                            observer.next(hours);
+                        }
                     }
                 }
                 observer.complete();
@@ -110,7 +101,7 @@ var DisneyCalendarScrapperService = (function () {
             var parkOperatingHours = new park_operating_hours_1.ParkOperatingHours();
             parkOperatingHours.parkId = park_1.ParkEnum[parkDef.id];
             parkOperatingHours.parkName = parkDef.name;
-            parkOperatingHours.date = moment(date);
+            parkOperatingHours.date = date;
             var nameContainer = element.parent;
             if (!nameContainer) {
                 console.error('Unable to step to parent of parkName for park \'' + parkDef.name + '\'');
@@ -198,16 +189,16 @@ var DisneyCalendarScrapperService = (function () {
                 continue;
             }
             var modStartDate = moment.tz('America/New_York');
-            modStartDate.month(date.getMonth());
-            modStartDate.date(date.getDate());
-            modStartDate.year(date.getFullYear());
+            modStartDate.month(date.month - 1);
+            modStartDate.date(date.date);
+            modStartDate.year(date.year);
             modStartDate.hours(startTime.hours());
             modStartDate.minutes(startTime.minutes());
             modStartDate.seconds(0);
             var modEndDate = moment.tz('America/New_York');
-            modEndDate.month(date.getMonth());
-            modEndDate.date(date.getDate());
-            modEndDate.year(date.getFullYear());
+            modEndDate.month(date.month - 1);
+            modEndDate.date(date.date);
+            modEndDate.year(date.year);
             modEndDate.hours(endTime.hours());
             modEndDate.minutes(endTime.minutes());
             modEndDate.seconds(0);

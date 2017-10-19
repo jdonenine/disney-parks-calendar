@@ -3,7 +3,6 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/mergeMap';
 
 import cheerio = require('cheerio');
-import dateFormat = require('dateformat');
 import moment = require('moment-timezone');
 import { Moment } from 'moment/moment';
 import request = require('request');
@@ -14,6 +13,7 @@ import { CalendarAvailability } from '../model/calendar-availability';
 import { ParkEnum } from '../model/park';
 import { ParkDefinition, ParkEnumHelper } from '../model/park';
 import { ParkOperatingHours } from '../model/park-operating-hours';
+import { SimpleDate } from '../model/simple-date';
 import { TimeRange } from '../model/time-range';
 
 const TIME_RANGE_SEPARATOR: string = ' – ';
@@ -23,27 +23,15 @@ export class DisneyCalendarScrapperService {
     private static readonly DISNEY_CALENDAR_URL_BASE: string = 'https://disneyworld.disney.go.com/calendars/';
     private static readonly DISNEY_CALENDAR_URL_DATE_FORMAT: string = 'yyyy-mm-dd';
 
-    static buildURL(date: Date): string {
-        if (!date) {
+    static buildURL(date: SimpleDate): string {
+        if (!date || !date.isValid()) {
             throw new Error('Invalid date requested');
         }
-        return DisneyCalendarScrapperService.DISNEY_CALENDAR_URL_BASE + dateFormat(date, DisneyCalendarScrapperService.DISNEY_CALENDAR_URL_DATE_FORMAT) + '/';
+        return DisneyCalendarScrapperService.DISNEY_CALENDAR_URL_BASE + date.toString() + '/';
     }
 
-    static findLastDateAvailableStartingFrom(date: Date = new Date()): Observable<CalendarAvailability> {
-        return DisneyCalendarScrapperService.isCalendarAvailable(date).
-            mergeMap(availability => {
-                if (availability.available) {
-                    return DisneyCalendarScrapperService.findLastDateAvailableStartingFrom(new Date(availability.date.getTime() + HOURS_24_MS));
-                } else {
-                    let lastDate = new Date(availability.date.getTime() - HOURS_24_MS);
-                    return Observable.of(new CalendarAvailability(lastDate, true));
-                }
-            });
-    }
-
-    static isCalendarAvailable(date: Date): Observable<CalendarAvailability> {
-        if (!date) {
+    static isCalendarAvailable(date: SimpleDate): Observable<CalendarAvailability> {
+        if (!date || !date.isValid()) {
             return Observable.throw('Invalid date requested') as Observable<CalendarAvailability>;
         }
         let URL: string = DisneyCalendarScrapperService.buildURL(date);
@@ -63,19 +51,23 @@ export class DisneyCalendarScrapperService {
         })
     }
 
-    static getOperatingHours(date: Date): Observable<ParkOperatingHours> {
+    static getOperatingHours(date: SimpleDate): Observable<ParkOperatingHours> {
         if (!date) {
             return Observable.throw('Invalid date requested') as Observable<ParkOperatingHours>;
         }
         let URL: string = DisneyCalendarScrapperService.buildURL(date);
         return Observable.create((observer: Observer<ParkOperatingHours>) => {
-            request(URL, (error, response, body) => {
+            request({url: URL, followRedirect: false}, (error, response, body) => {
                 if (error) {
                     observer.error(error);
                 } else {
-                    let hoursList: Array<ParkOperatingHours> = DisneyCalendarScrapperService.processHTML(body, date);
-                    for (let hours of hoursList) {
-                        observer.next(hours);
+                    if (response.statusCode == 302) {
+                        observer.next(null);
+                    } else {
+                        let hoursList: Array<ParkOperatingHours> = DisneyCalendarScrapperService.processHTML(body, date);
+                        for (let hours of hoursList) {
+                            observer.next(hours);
+                        }
                     }
                 }
                 observer.complete();
@@ -83,7 +75,7 @@ export class DisneyCalendarScrapperService {
         })
     }  
 
-    private static processHTML(body: string, date: Date): Array<ParkOperatingHours> {
+    private static processHTML(body: string, date: SimpleDate): Array<ParkOperatingHours> {
         if (!body || body.length < 1) {
             throw new Error('HTML content is not valid.');
         }
@@ -114,7 +106,7 @@ export class DisneyCalendarScrapperService {
             let parkOperatingHours: ParkOperatingHours = new ParkOperatingHours();
             parkOperatingHours.parkId = ParkEnum[parkDef.id];
             parkOperatingHours.parkName = parkDef.name;
-            parkOperatingHours.date = moment(date);
+            parkOperatingHours.date = date;
 
             let nameContainer: CheerioElement = element.parent;
             if (!nameContainer) {
@@ -161,7 +153,7 @@ export class DisneyCalendarScrapperService {
         return hoursList;
     }
 
-    private static processHoursContainer(container: CheerioElement, date: Date): Array<TimeRange> {
+    private static processHoursContainer(container: CheerioElement, date: SimpleDate): Array<TimeRange> {
         if (!container || !container.children) {
             return;
         }
@@ -181,7 +173,7 @@ export class DisneyCalendarScrapperService {
         return DisneyCalendarScrapperService.processTimeRanges(timeRangeStrings, date);
     }
 
-    private static processTimeRanges(timeRangeStrings: Array<string>, date: Date): Array<TimeRange> {
+    private static processTimeRanges(timeRangeStrings: Array<string>, date: SimpleDate): Array<TimeRange> {
         if (!timeRangeStrings || timeRangeStrings.length < 1) {
             return;
         }
@@ -204,16 +196,16 @@ export class DisneyCalendarScrapperService {
                 continue;
             }
             let modStartDate:Moment = moment.tz('America/New_York');
-            modStartDate.month(date.getMonth());
-            modStartDate.date(date.getDate());
-            modStartDate.year(date.getFullYear());
+            modStartDate.month(date.month - 1);
+            modStartDate.date(date.date);
+            modStartDate.year(date.year);
             modStartDate.hours(startTime.hours());
             modStartDate.minutes(startTime.minutes());
             modStartDate.seconds(0);
             let modEndDate:Moment = moment.tz('America/New_York');
-            modEndDate.month(date.getMonth());
-            modEndDate.date(date.getDate());
-            modEndDate.year(date.getFullYear());
+            modEndDate.month(date.month - 1);
+            modEndDate.date(date.date);
+            modEndDate.year(date.year);
             modEndDate.hours(endTime.hours());
             modEndDate.minutes(endTime.minutes());
             modEndDate.seconds(0);

@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs/Rx';
 import { CalendarAvailability } from '../model/calendar-availability';
 import { ParkOperatingHours } from '../model/park-operating-hours';
+import { SimpleDate } from '../model/simple-date';
 export interface CalendarAccess {
-    isCalendarAvailable(date: Date): Observable<CalendarAvailability>;
-    findLastDateAvailableStartingFrom(date: Date): Observable<CalendarAvailability>;
-    getOperatingHours(date: Date): Observable<ParkOperatingHours>;
+    isCalendarAvailable(date: SimpleDate): Observable<CalendarAvailability>;
+    getOperatingHours(date: SimpleDate): Observable<ParkOperatingHours>;
 }
