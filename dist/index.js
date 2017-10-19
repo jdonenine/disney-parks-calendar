@@ -10,4 +10,6 @@ var disney_parks_calendar_1 = require("./disney-parks-calendar");
 exports.DisneyParksCalendar = disney_parks_calendar_1.DisneyParksCalendar;
 var park_operating_hours_1 = require("./model/park-operating-hours");
 exports.ParkOperatingHours = park_operating_hours_1.ParkOperatingHours;
+var simple_date_1 = require("./model/simple-date");
+exports.SimpleDate = simple_date_1.SimpleDate;
 //# sourceMappingURL=index.js.map
